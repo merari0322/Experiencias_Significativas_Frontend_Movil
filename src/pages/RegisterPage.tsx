@@ -33,7 +33,7 @@ export default function RegisterPage({ navigation }) {
     <View style={styles.container}>      
       <LinearGradient
         colors={["#ffffffff", "#009CFF"]}
-        locations={[0.2, 0.8]} // azul hasta el 20%, blanco empieza en 80%
+        locations={[0.2, 0.8]} 
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.container}
@@ -76,7 +76,6 @@ export default function RegisterPage({ navigation }) {
                   </View>
                 </View>
 
-                {/*Apellidos */}
                 <View style={styles.row}>
                   <View style={styles.inputContainer}>
                     <Text>Primer Apellido:</Text>
@@ -96,7 +95,6 @@ export default function RegisterPage({ navigation }) {
                   </View>
                 </View>
 
-                {/*Documento */}
                 <View style={styles.row}>
                   <View style={styles.inputContainer}>
                     <Text>Tipo de documento:</Text>
@@ -125,7 +123,6 @@ export default function RegisterPage({ navigation }) {
                   </View>
                 </View>
 
-                {/*DANE y Usuario */}
                 <View style={styles.row}>
                   <View style={styles.inputContainer}>
                     <Text>Código DANE:</Text>
@@ -147,7 +144,6 @@ export default function RegisterPage({ navigation }) {
                   </View>
                 </View>
 
-                {/* Correo institucional */}
                 <View style={styles.fullInputContainer}>
                   <Text>Correo institucional:</Text>
                   <TextInput
@@ -159,7 +155,6 @@ export default function RegisterPage({ navigation }) {
                   />
                 </View>
 
-                {/* Contraseña */}
                 <View style={styles.fullInputContainer}>
                   <Text>Contraseña:</Text>
                   <TextInput
@@ -170,7 +165,6 @@ export default function RegisterPage({ navigation }) {
                   />
                 </View>
 
-                {/* Botón de registro */}
                 <TouchableOpacity style={styles.registerButton} onPress={handleRegistro}>
                   <Text style={styles.registerButtonText}>Registrarse</Text>
                 </TouchableOpacity>
@@ -204,8 +198,8 @@ const styles = StyleSheet.create({
     top: 440,
     right: 360,
     transform: [
-    { scale: 5.5 },       // lo hace más grande
-    { rotate: "-15deg" }, // lo inclina en diagonal
+    { scale: 5.5 },       
+    { rotate: "-15deg" }, 
   ],
 },
   scrollContainer: {
