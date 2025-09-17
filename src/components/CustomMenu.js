@@ -7,15 +7,13 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export default function CustomMenu({ visible, onClose, onNavigate }) {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.menu}>
-
           <View style={styles.header}>
             <Image
               source={require("../img/coetesolo.png")}
@@ -25,8 +23,6 @@ export default function CustomMenu({ visible, onClose, onNavigate }) {
               Gestión de Experiencias Significativas
             </Text>
           </View>
-
-
           <View style={styles.userSection}>
             <Image
               source={require("../img/persona.png")}
@@ -37,40 +33,35 @@ export default function CustomMenu({ visible, onClose, onNavigate }) {
               <Text style={styles.userRole}>Admin</Text>
             </View>
           </View>
-
-
           <TouchableOpacity
             onPress={() => onNavigate("AdmPage")}
             style={styles.item}
           >
             <View style={styles.iconCircle}>
-              <Ionicons name="home-outline" size={24} color="black" />{" "}
+              <Ionicons name="home-outline" size={24} color="black" />
             </View>
             <Text style={styles.text}>Inicio</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            onPress={() => onNavigate("MenuPage")}
+            onPress={() => onNavigate("Follow_upPage")}
             style={styles.item}
           >
             <View style={styles.iconCircle}>
-              <MaterialIcons name="computer" size={24} color="black" />{" "}
+              <MaterialIcons name="computer" size={24} color="black" />
             </View>
             <Text style={styles.text}>Seguimiento</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            onPress={() => onNavigate("ExperienciaPage")}
+            onPress={() => onNavigate("ExperiencePage")}
             style={styles.item}
           >
             <View style={styles.iconCircle}>
-              <Ionicons name="document-text-outline" size={24} color="black" />{" "}
+              <Ionicons name="document-text-outline" size={24} color="black" />
             </View>
             <Text style={styles.text}>Experiencia</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
-            onPress={() => onNavigate("EvaluacionPage")}
+            onPress={() => onNavigate("EvaluationPage")}
             style={styles.item}
           >
             <View style={styles.iconCircle}>
@@ -78,8 +69,6 @@ export default function CustomMenu({ visible, onClose, onNavigate }) {
             </View>
             <Text style={styles.text}>Evaluación</Text>
           </TouchableOpacity>
-
-          {/* Botón cerrar */}
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
             <Text style={styles.closeText}>Cerrar</Text>
           </TouchableOpacity>
@@ -156,14 +145,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#ffffffff",
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
   },
   text: {
     fontSize: 15,
     marginLeft: 12,
-    color: "#000000ff",
+    color: "#000",
   },
   closeBtn: {
     marginTop: 30,

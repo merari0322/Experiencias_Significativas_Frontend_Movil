@@ -7,6 +7,7 @@ import AdmPage from './src/pages/AdmPage';
 import Follow_upPage from './src/pages/Follow_upPage';
 import ExperiencePage from './src/pages/ExperiencePage';
 import RecoverPassword from './src/pages/recover_password';
+import EvaluationPage from './src/pages/EvaluationPage';
 
 
 const Stack = createStackNavigator();
@@ -22,6 +23,7 @@ export default function App() {
         <Stack.Screen name="Follow_upPage" component={Follow_upPage} />
         <Stack.Screen name='ExperiencePage' component={ExperiencePage} />
         <Stack.Screen name='recover_password' component={RecoverPassword} />
+        <Stack.Screen name="EvaluationPage" component={EvaluationPage} />
 
       </Stack.Navigator>
     </NavigationContainer>

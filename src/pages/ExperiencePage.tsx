@@ -1,9 +1,23 @@
 import React, { useState } from "react";
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import SearchBar from "../components/SearchBar";
+import CustomMenu from "../components/CustomMenu";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+
+// Define tus rutas aquí
+type RootStackParamList = {
+  AdmPage: undefined;
+  Follow_upPage: undefined;
+  ExperiencePage: undefined;
+  // Agrega aquí las rutas que tengas en tu navegación
+};
 
 export default function ExperiencePage() {
 	const [search, setSearch] = useState("");
+	const [menuVisible, setMenuVisible] = useState(false);
+
+	// Tipa el hook de navegación
+	const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
 	const experiences = [
 		{ id: 1, icon: require("../img/experiencia.png"), name: "Visitar Experiencia" },
@@ -16,12 +30,22 @@ export default function ExperiencePage() {
 	];
 
 	const handleMenu = () => {
-		alert("Menú");
+		setMenuVisible(true);
+	};
+
+	const handleNavigate = (screen: keyof RootStackParamList) => {
+		setMenuVisible(false);
+		navigation.navigate(screen);
 	};
 
 	return (
 		<View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
 			<SearchBar onSearch={setSearch} onMenu={handleMenu} />
+			<CustomMenu
+				visible={menuVisible}
+				onClose={() => setMenuVisible(false)}
+				onNavigate={handleNavigate}
+			/>
 			<ScrollView contentContainerStyle={styles.scrollContent}>
 				<Text style={styles.sectionTitle}>Actualizar Experiencias</Text>
 				<View style={styles.row}>
