@@ -113,15 +113,15 @@ export default function AdmPage({ navigation }) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#F3F6F9",
+    backgroundColor: "#F5F5F5",
   },
   containerr: {
     padding: 10,
-    backgroundColor: "#F3F6F9",
+    backgroundColor: "#F5F5F5",
   },
   container: {
     flex: 1,
-    backgroundColor: "#F3F6F9",
+    backgroundColor: "#F5F5F5",
     padding: 15,
     marginTop: -5,
   },

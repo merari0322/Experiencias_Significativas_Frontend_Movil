@@ -1,65 +1,83 @@
 import React, { useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
+import { ScrollView, View, Text, StyleSheet } from "react-native";
 import SearchBar from "../components/SearchBar";
 import CustomMenu from "../components/CustomMenu";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
+import Ionicons from "react-native-vector-icons/Ionicons";
+
+const iconBgColors: Record<string, string> = {
+  "document-text-outline": "#E3F0FF",
+  "trending-up-outline": "#E3FFE6",
+  "time-outline": "#FFF5DB",
+  "school-outline": "#E3F0FF",
+  "calendar-outline": "#E3F0FF",
+  "business-outline": "#E3F0FF",
+  "people-outline": "#E3FFE6",
+};
+
+const iconColors: Record<string, string> = {
+  "document-text-outline": "#009CFF",
+  "trending-up-outline": "#00B53B",
+  "time-outline": "#FFB200",
+  "school-outline": "#009CFF",
+  "calendar-outline": "#00B53B",
+  "business-outline": "#009CFF",
+  "people-outline": "#00B53B",
+};
 
 const cardsData = [
   {
-    icon: require("../img/academico.png"),
+    icon: "document-text-outline",
     value: "2",
     label: "Número de experiencias registradas en la vigencia",
   },
   {
-    icon: require("../img/ambiental.png"),
-    value: "2",
-    label: "Número de experiencias con plan de mejoramiento",
-  },
-  {
-    icon: require("../img/arte.png"),
-    value: "2",
-    label: "Cantidad de docentes formados mediante las rutas a la significación",
-  },
-  {
-    icon: require("../img/ciencia.png"),
-    value: "2",
-    label: "Número de experiencias que participan en eventos o convocatorias en la actual vigencia",
-  },
-  {
-    icon: require("../img/comunicacion.png"),
-    value: "2",
-    label: "Instituciones educativas que registraron experiencias",
-  },
-  {
-    icon: require("../img/deporte.png"),
-    value: "2",
-    label: "Crecimiento en la inscripción de experiencias nuevas en el proceso",
-  },
-  {
-    icon: require("../img/flecha.png"),
+    icon: "trending-up-outline",
     value: "2",
     label: "Crecimiento en la inscripción de experiencias. Actualización que continúan en el proceso",
   },
   {
-    icon: require("../img/inclusion.png"),
+    icon: "time-outline",
+    value: "2",
+    label: "Número de experiencias con plan de mejoramiento",
+  },
+  {
+    icon: "trending-up-outline",
+    value: "2",
+    label: "Crecimiento en la inscripción de experiencias nuevas en el proceso",
+  },
+  {
+    icon: "school-outline",
+    value: "2",
+    label: "Cantidad de docentes formados mediante las rutas a la significación",
+  },
+  {
+    icon: "calendar-outline",
+    value: "2",
+    label: "Número de experiencias que participan en eventos o convocatorias en la actual vigencia",
+  },
+  {
+    icon: "business-outline",
+    value: "2",
+    label: "Instituciones educativas que registraron experiencias",
+  },
+  {
+    icon: "people-outline",
     value: "25%",
     label: "Participación de eventos SEM",
   },
   {
-    icon: require("../img/libros.png"),
     value: "2",
     label: "Experiencias significativas en estado de desarrollo naciente",
     sub: ["experiencias significativas en estado de desarrollo naciente"],
   },
   {
-    icon: require("../img/mundo.png"),
     value: "2",
     label: "Experiencias significativas en estado de desarrollo creciente",
     sub: ["experiencias significativas en estado de desarrollo creciente"],
   },
   {
-    icon: require("../img/coete.png"),
     value: "2",
     label: "Experiencias significativas en estado de desarrollo inspiradora",
     sub: ["experiencias significativas en estado de desarrollo inspiradora"],
@@ -94,8 +112,21 @@ export default function Follow_upPage() {
         {filteredCards.map((card, idx) => (
           <View key={idx} style={styles.card}>
             <View style={styles.cardHeader}>
-              <Image source={card.icon} style={styles.icon} />
-              <Text style={styles.value}>{card.value}</Text>
+              {card.icon && (
+                <View
+                  style={[
+                    styles.iconBox,
+                    { backgroundColor: iconBgColors[card.icon] || "#E3F0FF" },
+                  ]}
+                >
+                  <Ionicons
+                    name={card.icon}
+                    size={26}
+                    color={iconColors[card.icon] || "#009CFF"}
+                  />
+                </View>
+              )}
+              <Text style={[styles.value, !card.icon && { marginLeft: 0 }]}>{card.value}</Text>
             </View>
             <Text style={styles.label}>{card.label}</Text>
             {card.sub && (
@@ -133,11 +164,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  icon: {
-    width: 32,
-    height: 32,
+  iconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 10,
-    resizeMode: "contain",
   },
   value: {
     fontSize: 28,

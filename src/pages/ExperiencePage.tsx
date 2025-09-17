@@ -123,6 +123,8 @@ const styles = StyleSheet.create({
 		color: "#009CFF",
 		fontWeight: "bold",
 		fontSize: 15,
+		justifyContent: "center",
+		textAlign: "center",
 	},
 	addCard: {
 		backgroundColor: "#fff",
