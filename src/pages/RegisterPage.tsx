@@ -3,20 +3,35 @@ import {  View,  Text,  TextInput,  TouchableOpacity,  StyleSheet,  Alert,  Scro
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
 import { ImageBackground } from "react-native";
+import { savePerson } from "../api/Services/PersonService";
+import { PersonDTO } from "../api/Types/PersonTypes";
+import { useRegistrationEnums } from "../hooks/useEnums";
 
 export default function RegisterPage({ navigation }) {
+  // Hook para obtener los enums desde el backend
+  const { enums, loading: enumsLoading, error: enumsError, getEnumForPicker } = useRegistrationEnums();
+  
   const [formData, setFormData] = useState({
-    primerNombre: '',
-    segundoNombre: '',
-    primerApellido: '',
-    segundoApellido: '',
-    tipoDocumento: '',
-    numeroDocumento: '',
-    codigoDane: '',
-    nombreUsuario: '',
-    correoInstitucional: '',
-    contraseña: ''
+    documentType: '',
+    identificationNumber: '',
+    firstName: '',
+    middleName: '',
+    firstLastName: '',
+    secondLastName: '',
+    fullName: '',
+    codeDane: '',
+    emailInstitutional: '',
+    email: '',
+    phone: '',
+    // Puedes agregar otros campos si el backend lo requiere
   });
+
+  // Mostrar error si hay problemas cargando los enums
+  React.useEffect(() => {
+    if (enumsError) {
+      Alert.alert("Error", `No se pudieron cargar las opciones: ${enumsError}`);
+    }
+  }, [enumsError]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -25,8 +40,38 @@ export default function RegisterPage({ navigation }) {
     }));
   };
 
-  const handleRegistro = () => {
-  };handleRegistro
+  const handleRegistro = async () => {
+    // Validación básica
+    if (!formData.firstName || !formData.firstLastName || !formData.emailInstitutional) {
+      Alert.alert("Error", "Completa los campos obligatorios");
+      return;
+    }
+
+    // Construir el DTO para el backend
+    const personDTO: PersonDTO = {
+      id: 0, // El backend lo ignora o lo asigna
+      documentType: formData.documentType,
+      identificationNumber: formData.identificationNumber,
+      firstName: formData.firstName,
+      middleName: formData.middleName,
+      firstLastName: formData.firstLastName,
+      secondLastName: formData.secondLastName,
+      fullName: `${formData.firstName} ${formData.middleName} ${formData.firstLastName} ${formData.secondLastName}`.trim(),
+      codeDane: formData.codeDane,
+      emailInstitutional: formData.emailInstitutional,
+      email: formData.email,
+      phone: Number(formData.phone),
+    };
+
+    try {
+      const response = await savePerson(personDTO);
+      Alert.alert("Registro exitoso", "Persona creada correctamente");
+      navigation.navigate("LoginPage");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "No se pudo registrar la persona");
+    }
+  };
   
 
   return (
@@ -59,19 +104,19 @@ export default function RegisterPage({ navigation }) {
                 {/* Nombres */}
                 <View style={styles.row}>
                   <View style={styles.inputContainer}>
-                    <Text >Primer Nombre:</Text>
+                    <Text>Primer Nombre:</Text>
                     <TextInput
                       style={styles.input}
-                      value={formData.primerNombre}
-                      onChangeText={(value) => handleInputChange('primerNombre', value)}
+                      value={formData.firstName}
+                      onChangeText={(value) => handleInputChange('firstName', value)}
                     />
                   </View>
                   <View style={styles.inputContainer}>
-                    <Text >Segundo Nombre:</Text>
+                    <Text>Segundo Nombre:</Text>
                     <TextInput
                       style={styles.input}
-                      value={formData.segundoNombre}
-                      onChangeText={(value) => handleInputChange('segundoNombre', value)}
+                      value={formData.middleName}
+                      onChangeText={(value) => handleInputChange('middleName', value)}
                     />
                   </View>
                 </View>
@@ -81,16 +126,16 @@ export default function RegisterPage({ navigation }) {
                     <Text>Primer Apellido:</Text>
                     <TextInput
                       style={styles.input}
-                      value={formData.primerApellido}
-                      onChangeText={(value) => handleInputChange('primerApellido', value)}
+                      value={formData.firstLastName}
+                      onChangeText={(value) => handleInputChange('firstLastName', value)}
                     />
                   </View>
                   <View style={styles.inputContainer}>
                     <Text>Segundo Apellido:</Text>
                     <TextInput
                       style={styles.input}
-                      value={formData.segundoApellido}
-                      onChangeText={(value) => handleInputChange('segundoApellido', value)}
+                      value={formData.secondLastName}
+                      onChangeText={(value) => handleInputChange('secondLastName', value)}
                     />
                   </View>
                 </View>
@@ -100,15 +145,23 @@ export default function RegisterPage({ navigation }) {
                     <Text>Tipo de documento:</Text>
                     <View style={styles.pickerContainer}>
                       <Picker
-                        selectedValue={formData.tipoDocumento}
+                        selectedValue={formData.documentType}
                         style={styles.picker}
-                        onValueChange={(value) => handleInputChange('tipoDocumento', value)}
+                        onValueChange={(value) => handleInputChange('documentType', value)}
                         mode="dropdown"
+                        enabled={!enumsLoading}
                       >
-                        <Picker.Item label="Seleccionar" value="" />
-                        <Picker.Item label="Cédula" value="CC" />
-                        <Picker.Item label="Tarjeta de Identidad" value="TI" />
-                        <Picker.Item label="Cédula de Extranjería" value="CE" />
+                        {enumsLoading ? (
+                          <Picker.Item label="Cargando..." value="" />
+                        ) : (
+                          getEnumForPicker('DocumentType').map((item) => (
+                            <Picker.Item 
+                              key={item.key} 
+                              label={item.value} 
+                              value={item.key} 
+                            />
+                          ))
+                        )}
                       </Picker>
                     </View>
                   </View>
@@ -116,8 +169,8 @@ export default function RegisterPage({ navigation }) {
                     <Text>Número de documento:</Text>
                     <TextInput
                       style={styles.input}
-                      value={formData.numeroDocumento}
-                      onChangeText={(value) => handleInputChange('numeroDocumento', value)}
+                      value={formData.identificationNumber}
+                      onChangeText={(value) => handleInputChange('identificationNumber', value)}
                       keyboardType="numeric"
                     />
                   </View>
@@ -126,43 +179,74 @@ export default function RegisterPage({ navigation }) {
                 <View style={styles.row}>
                   <View style={styles.inputContainer}>
                     <Text>Código DANE:</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={formData.codigoDane}
-                      onChangeText={(value) => handleInputChange('codigoDane', value)}
-                      keyboardType="numeric"
-                    />
+                    <View style={styles.pickerContainer}>
+                      <Picker
+                        selectedValue={formData.codeDane}
+                        style={styles.picker}
+                        onValueChange={(value) => handleInputChange('codeDane', value)}
+                        mode="dropdown"
+                        enabled={!enumsLoading}
+                      >
+                        {enumsLoading ? (
+                          <Picker.Item label="Cargando..." value="" />
+                        ) : (
+                          getEnumForPicker('CodeDane').map((item) => (
+                            <Picker.Item 
+                              key={item.key} 
+                              label={item.value} 
+                              value={item.key} 
+                            />
+                          ))
+                        )}
+                      </Picker>
+                    </View>
                   </View>
                   <View style={styles.inputContainer}>
-                    <Text>Nombre de usuario:</Text>
+                    <Text>Correo institucional:</Text>
+                    <View style={styles.pickerContainer}>
+                      <Picker
+                        selectedValue={formData.emailInstitutional}
+                        style={styles.picker}
+                        onValueChange={(value) => handleInputChange('emailInstitutional', value)}
+                        mode="dropdown"
+                        enabled={!enumsLoading}
+                      >
+                        {enumsLoading ? (
+                          <Picker.Item label="Cargando..." value="" />
+                        ) : (
+                          getEnumForPicker('EmailInstitutional').map((item) => (
+                            <Picker.Item 
+                              key={item.key} 
+                              label={item.value} 
+                              value={item.key} 
+                            />
+                          ))
+                        )}
+                      </Picker>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.row}>
+                  <View style={styles.inputContainer}>
+                    <Text>Correo personal:</Text>
                     <TextInput
                       style={styles.input}
-                      value={formData.nombreUsuario}
-                      onChangeText={(value) => handleInputChange('nombreUsuario', value)}
+                      value={formData.email}
+                      onChangeText={(value) => handleInputChange('email', value)}
+                      keyboardType="email-address"
                       autoCapitalize="none"
                     />
                   </View>
-                </View>
-
-                <View style={styles.fullInputContainer}>
-                  <Text>Correo institucional:</Text>
-                  <TextInput
-                    style={[styles.input, styles.fullInput]}
-                    value={formData.correoInstitucional}
-                    onChangeText={(value) => handleInputChange('correoInstitucional', value)}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                  />
-                </View>
-
-                <View style={styles.fullInputContainer}>
-                  <Text>Contraseña:</Text>
-                  <TextInput
-                    style={[styles.input, styles.fullInput]}
-                    value={formData.contraseña}
-                    onChangeText={(value) => handleInputChange('contraseña', value)}
-                    secureTextEntry={true}
-                  />
+                  <View style={styles.inputContainer}>
+                    <Text>Teléfono:</Text>
+                    <TextInput
+                      style={styles.input}
+                      value={formData.phone}
+                      onChangeText={(value) => handleInputChange('phone', value)}
+                      keyboardType="numeric"
+                    />
+                  </View>
                 </View>
 
                 <TouchableOpacity style={styles.registerButton} onPress={handleRegistro}>
@@ -257,7 +341,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   pickerContainer: {
-    height: 48,
+    height: 35,
     borderWidth: 1,
     borderColor: '#000000ff',
     borderRadius: 10,
@@ -265,7 +349,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   picker: {
-    height: 48,
+    height: 35,
     color: '#000000ff',
     borderRadius: 10,
   },

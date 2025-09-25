@@ -16,7 +16,6 @@ export default function App() {
   return (
     <NavigationContainer> 
       <Stack.Navigator initialRouteName="LoginPage" screenOptions={{ headerShown: false }}>
-        {/* Corrected from LoginPages to LoginPage */}
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="RegisterPage" component={RegisterPage} />
         <Stack.Screen name="AdmPage" component={AdmPage} />

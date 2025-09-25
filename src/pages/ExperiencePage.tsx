@@ -3,20 +3,17 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image } from "rea
 import SearchBar from "../components/SearchBar";
 import CustomMenu from "../components/CustomMenu";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-// Define tus rutas aquí
 type RootStackParamList = {
   AdmPage: undefined;
   Follow_upPage: undefined;
   ExperiencePage: undefined;
-  // Agrega aquí las rutas que tengas en tu navegación
 };
 
 export default function ExperiencePage() {
 	const [search, setSearch] = useState("");
 	const [menuVisible, setMenuVisible] = useState(false);
-
-	// Tipa el hook de navegación
 	const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
 	const experiences = [
@@ -24,10 +21,6 @@ export default function ExperiencePage() {
 		{ id: 2, icon: require("../img/experiencia.png"), name: "Visitar Experiencia" },
 	];
 
-	const newExperiences = [
-		{ id: 1, name: "Agregar Nueva Experiencia" },
-		{ id: 2, name: "Agregar Nueva Experiencia" },
-	];
 
 	const handleMenu = () => {
 		setMenuVisible(true);
@@ -45,29 +38,21 @@ export default function ExperiencePage() {
 				visible={menuVisible}
 				onClose={() => setMenuVisible(false)}
 				onNavigate={handleNavigate}
+				onLogout={() => {
+					setMenuVisible(false);
+				}}
 			/>
 			<ScrollView contentContainerStyle={styles.scrollContent}>
-				<Text style={styles.sectionTitle}>Actualizar Experiencias</Text>
+				<Text style={styles.sectionTitle}>Actualizar/Información {"\n"} Experiencias</Text>
 				<View style={styles.row}>
 					{experiences.map(exp => (
 						<View key={exp.id} style={styles.expCard}>
+							<Ionicons style={styles.document} name="document-text-outline" size={24} />
 							<Image source={exp.icon} style={styles.expIcon} />
 							<TouchableOpacity style={styles.expButton}>
 								<Text style={styles.expButtonText}>{exp.name}</Text>
 							</TouchableOpacity>
 						</View>
-					))}
-				</View>
-
-				<Text style={styles.sectionTitle}>Registro de Experiencias Nuevas</Text>
-				<View style={styles.row}>
-					{newExperiences.map(exp => (
-						<TouchableOpacity key={exp.id} style={styles.addCard}>
-							<View style={styles.plusCircle}>
-								<Text style={styles.plus}>+</Text>
-							</View>
-							<Text style={styles.addText}>{exp.name}</Text>
-						</TouchableOpacity>
 					))}
 				</View>
 			</ScrollView>
@@ -120,7 +105,7 @@ const styles = StyleSheet.create({
 		marginTop: 4,
 	},
 	expButtonText: {
-		color: "#009CFF",
+		color: "#000000ff",
 		fontWeight: "bold",
 		fontSize: 15,
 		justifyContent: "center",
@@ -155,4 +140,9 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: "center",
 	},
+	document: {
+		top: -5,
+		left: 45,
+		color: "#888",
+	}
 });
